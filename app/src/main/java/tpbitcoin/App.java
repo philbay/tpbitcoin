@@ -28,11 +28,18 @@ public class App {
 
         //Q1  hashrate
         double localHashrate = new HashRateEstimator(5000,5).estimate();
-
+        System.out.println(localHashrate);
         // Q2: latest  block  from mainet (bitcoin blockchain) and its predecessor
         Context context   = new Context(new UnitTestParams()); // required  for working with bitcoinj
         Explorer explorer = new Explorer(); // for interacting with blockchain.info API
+
+        Block block = explorer.getBlockFromHash(context.getParams(), explorer.getLatestHash());
+        System.out.println("Le Nonce : " + block.getNonce());
+        System.out.println("Les params" + block.getParams());
+        System.out.println("Les difficultes" + block.getDifficultyTarget());
+
         // Q3 Some TXs
+        System.out.println(block.getTransactions().get(0));
 
         // Q4 Mine a new block
         Miner miner = new Miner(context.getParams());
@@ -53,8 +60,9 @@ public class App {
             Type listType = new TypeToken<ArrayList<MiningHardware>>(){}.getType();
             hardwares = gson.fromJson(reader,listType);
         } catch (Exception e) {
-            System.err.println("error opening/reading hardware.json "+ e.getMessage());
+            System.err.println("error opning/reading hardware.json "+ e.getMessage());
         }
+
 
 
 
